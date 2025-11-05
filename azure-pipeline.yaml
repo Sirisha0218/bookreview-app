@@ -9,38 +9,31 @@ stages:
     jobs:
       - job: App_Deployment
         displayName: "Run Ansible Playbook to Deploy App"
-        timeoutInMinutes: 30   # fail the job if it runs longer than 30 minutes
         pool:
           name: "linux-hosted-agent-pool"
 
         steps:
           - script: |
-              # Wait until apt/dpkg lock is free
-              while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
-                echo "Another apt process is running. Waiting..."
-                sleep 5
-              done
-
-              sudo apt-get update -y
-              sudo apt-get install -y ansible sshpass
+              sudo apt update
+              sudo apt install -y ansible sshpass
             displayName: "Install Ansible & SSH dependencies"
 
           - task: DownloadSecureFile@1
             name: download_ssh_key
             inputs:
-              secureFile: "ubuntu-key"   # must match the exact name in Secure Files
+              secureFile: "ubuntu-key"
 
           - script: |
               mkdir -p ~/.ssh
-              cp $(download_ssh_key.secureFilePath) ~/.ssh/id_rsa
-              chmod 600 ~/.ssh/id_rsa
+              cp $(download_ssh_key.secureFilePath) ~/.ssh/ubuntu-key.pem
+              chmod 600 ~/.ssh/ubuntu-key.pem
               echo "StrictHostKeyChecking no" > ~/.ssh/config
             displayName: "Setup SSH Private Key"
 
+
           - script: |
               cd ansible
-              ansible-playbook -i inventory.ini site.yml -vvv \
-                --ssh-extra-args "-o ConnectTimeout=10 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+              ansible-playbook -i inventory.ini site.yml --ssh-extra-args "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
             displayName: "Run Ansible Playbook"
             env:
               ANSIBLE_HOST_KEY_CHECKING: "False"
