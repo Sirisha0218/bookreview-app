@@ -33,7 +33,8 @@ stages:
 
           - script: |
               cd ansible
-              ansible-playbook -i inventory.ini site.yml --ssh-extra-args "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+              ansible-playbook -i inventory.ini site.yml -vvv \
+                --ssh-extra-args "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
             displayName: "Run Ansible Playbook"
             env:
               ANSIBLE_HOST_KEY_CHECKING: "False"
