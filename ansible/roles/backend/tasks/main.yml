@@ -8,6 +8,7 @@
     state: present
     allowerasing: true
   become: yes
+  when: ansible_os_family == "RedHat"
 
 - name: Clone backend repository
   git:
