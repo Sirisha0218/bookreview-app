@@ -4,11 +4,11 @@
     dest: /opt/frontend
     version: main
 
-- name: Set ownership to azureuser for frontend app
+- name: Set ownership to correct user for frontend app
   file:
     path: /opt/frontend
-    owner: azureuser
-    group: azureuser
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
     recurse: yes
 
 - name: Install frontend dependencies
