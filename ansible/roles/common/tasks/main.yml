@@ -1,9 +1,15 @@
-- name: Update apt cache
+- name: Update package cache (Debian/Ubuntu)
   apt:
     update_cache: yes
     cache_valid_time: 3600
+  when: ansible_os_family == "Debian"
 
-- name: Install essential packages
+- name: Update package cache (RedHat/Amazon)
+  yum:
+    update_cache: yes
+  when: ansible_os_family == "RedHat"
+
+- name: Install essential packages (Debian/Ubuntu)
   apt:
     name:
       - curl
@@ -11,13 +17,33 @@
       - unzip
       - mysql-client
     state: present
+  when: ansible_os_family == "Debian"
 
-- name: Install Node.js
+- name: Install essential packages (RedHat/Amazon)
+  yum:
+    name:
+      - curl
+      - git
+      - unzip
+      - mysql
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Install Node.js (Debian/Ubuntu)
   shell: |
     curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
     sudo apt-get install -y nodejs
   args:
     executable: /bin/bash
+  when: ansible_os_family == "Debian"
+
+- name: Install Node.js (RedHat/Amazon)
+  shell: |
+    curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
+    sudo yum install -y nodejs
+  args:
+    executable: /bin/bash
+  when: ansible_os_family == "RedHat"
 
 - name: Install PM2 globally
   npm:

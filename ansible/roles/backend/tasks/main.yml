@@ -39,7 +39,7 @@
   notify: Restart backend with PM2
 
 - name: Ensure pip is installed
-  apt:
+  package:
     name: python3-pip
     state: present
   become: yes
@@ -50,8 +50,8 @@
     executable: pip3
 
 - name: Install MySQL client (if not already installed)
-  apt:
-    name: mysql-client
+  package:
+    name: "{{ 'mysql-client' if ansible_os_family == 'Debian' else 'mysql' }}"
     state: present
   become: yes
 
