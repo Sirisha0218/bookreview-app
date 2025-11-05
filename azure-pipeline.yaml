@@ -25,8 +25,8 @@ stages:
 
           - script: |
               mkdir -p ~/.ssh
-              cp $(download_ssh_key.secureFilePath) ~/.ssh/ubuntu-key.pem
-              chmod 600 ~/.ssh/ubuntu-key.pem
+              cp $(download_ssh_key.secureFilePath) ~/.ssh/ubuntu-key
+              chmod 600 ~/.ssh/ubuntu-key
               echo "StrictHostKeyChecking no" > ~/.ssh/config
             displayName: "Setup SSH Private Key"  
 
