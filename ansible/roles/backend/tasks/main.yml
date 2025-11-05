@@ -51,7 +51,7 @@
 
 - name: Install MySQL client (if not already installed)
   package:
-    name: "{{ 'mysql-client' if ansible_os_family == 'Debian' else 'mysql' }}"
+    name: "{{ 'mysql-client' if ansible_os_family == 'Debian' else 'mariadb105' }}"
     state: present
   become: yes
 
