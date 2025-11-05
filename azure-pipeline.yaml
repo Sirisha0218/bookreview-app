@@ -33,7 +33,7 @@ stages:
 
           - script: |
               cd ansible
-              ansible-playbook -i inventory.ini site.yml -vvv \
+              ansible-playbook -i inventory.ini site.yml --limit backend
                 --ssh-extra-args "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
             displayName: "Run Ansible Playbook"
             env:
