@@ -23,7 +23,7 @@ stages:
           - task: DownloadSecureFile@1
             name: download_ssh_key
             inputs:
-              secureFile: "id_rsa"
+              secureFile: "ubuntu-key.pem"
 
           - script: |
               mkdir -p ~/.ssh
